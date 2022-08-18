@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   final AppController _controller = Get.find<AppController>();
 
   // ignore: deprecated_member_use
-  final _contactData = supabase.from('contact').select().execute();
+  final _contactData = supabase.from('contact').select().neq('id', supabase.auth.currentUser!.id).execute();
 
   String room = "";
   @override
@@ -63,25 +63,23 @@ class _HomePageState extends State<HomePage> {
                 final username = contacts[index].username;
 
                 // show only friends
-                if (supabase.auth.currentUser!.id != id) {
-                  return ListTile(
-                    leading: const Icon(Icons.account_circle),
-                    title: Text(username.toString().split('@').first),
-                    subtitle: Text('$id'),
-                    onTap: () {
-                      // create room id
-                      if (supabase.auth.currentUser!.id.compareTo(id!) > 0) {
-                        room = "${supabase.auth.currentUser!.id}_$id";
-                      } else {
-                        room = "${id}_${supabase.auth.currentUser!.id}";
-                      }
-                      log('select room = $room');
-                      Get.to(() => ChatPage(), arguments: [id, room]);
-                    },
-                  );
-                }
-
-                return Container();
+                // if (supabase.auth.currentUser!.id != id) {
+                return ListTile(
+                  leading: const Icon(Icons.account_circle),
+                  title: Text(username.toString().split('@').first),
+                  subtitle: Text('$id'),
+                  onTap: () {
+                    // create room id
+                    if (supabase.auth.currentUser!.id.compareTo(id!) > 0) {
+                      room = "${supabase.auth.currentUser!.id}_$id";
+                    } else {
+                      room = "${id}_${supabase.auth.currentUser!.id}";
+                    }
+                    log('select room = $room');
+                    Get.to(() => ChatPage(), arguments: [id, room]);
+                  },
+                );
+                // }
               },
             );
           }
