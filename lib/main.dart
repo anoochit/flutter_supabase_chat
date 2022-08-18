@@ -17,7 +17,7 @@ main() async {
   // load env
   await dotenv.load(fileName: ".env");
 
-  // TODO: supabase initialized
+  // supabase initialized
   await Supabase.initialize(
     url: dotenv.env['SUPABASE_URL'] ?? "",
     anonKey: dotenv.env['SUPABASE_ANNON_KEY'] ?? "",
@@ -32,8 +32,6 @@ main() async {
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
 
   final _controller = Get.put(AppController());
 
