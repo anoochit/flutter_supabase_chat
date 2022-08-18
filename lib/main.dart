@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_supabase/binding/root_binding.dart';
+import 'package:flutter_supabase/controllers/app_controller.dart';
 import 'package:flutter_supabase/pages/signin/signin.dart';
 import 'package:flutter_supabase/pages/signup/signup.dart';
 import 'package:get/get.dart';
@@ -18,16 +21,22 @@ main() async {
   await Supabase.initialize(
     url: dotenv.env['SUPABASE_URL'] ?? "",
     anonKey: dotenv.env['SUPABASE_ANNON_KEY'] ?? "",
+    authCallbackUrlHostname: 'login-callback',
+  ).catchError(
+    (e) => log('Cannot initalized'),
   );
 
   // run app
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
+
+  final _controller = Get.put(AppController());
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -38,11 +47,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       initialBinding: RootBinging(),
-      home: const HomePage(),
+      initialRoute: _controller.isSignIn() ? '/home' : '/signin',
       getPages: [
         GetPage(name: '/home', page: () => const HomePage()),
-        GetPage(name: '/signup', page: () => SignInPage()),
-        GetPage(name: '/signin', page: () => SignUpPage()),
+        GetPage(name: '/signup', page: () => SignUpPage()),
+        GetPage(name: '/signin', page: () => SignInPage()),
       ],
     );
   }

@@ -1,9 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_supabase/controllers/app_controller.dart';
+import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignUpPage extends StatelessWidget {
   SignUpPage({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
+  final _controller = Get.find<AppController>();
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +50,9 @@ class SignUpPage extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // sing up
+                        _controller.mockSignUp();
                       },
                       child: const Text("Sign Up"),
                     ),
@@ -62,6 +69,7 @@ class SignUpPage extends StatelessWidget {
                   child: TextButton(
                     onPressed: () {
                       // singin
+                      Get.offAllNamed('/signin');
                     },
                     child: const Text("Sign In"),
                   ),

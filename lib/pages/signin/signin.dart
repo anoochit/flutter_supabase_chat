@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_supabase/controllers/app_controller.dart';
+import 'package:get/get.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
+  final _controller = Get.find<AppController>();
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +52,7 @@ class SignInPage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       // signin
+                      _controller.mockSignIn();
                     },
                     child: const Text("Sign In"),
                   ),
@@ -64,6 +68,7 @@ class SignInPage extends StatelessWidget {
                   child: TextButton(
                     onPressed: () {
                       // signup
+                      Get.offAllNamed('/signup');
                     },
                     child: const Text("Sign Up"),
                   ),
