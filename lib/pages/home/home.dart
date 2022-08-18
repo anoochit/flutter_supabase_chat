@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_supabase/controllers/app_controller.dart';
 import 'package:flutter_supabase/models/contact.dart';
+import 'package:flutter_supabase/widgets/center_loading.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Contact"),
+        title: const Text("Contact"),
         actions: [
           IconButton(
             onPressed: () {
@@ -49,7 +50,7 @@ class _HomePageState extends State<HomePage> {
         builder: (BuildContext context, AsyncSnapshot<PostgrestResponse<dynamic>> snapshot) {
           // hase error
           if (snapshot.hasError) {
-            return Text("Error");
+            return const Text("Error");
           }
 
           // has data
@@ -65,7 +66,7 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (BuildContext context, int index) {
                 final username = contacts[index].username;
                 return ListTile(
-                  leading: Icon(Icons.account_circle),
+                  leading: const Icon(Icons.account_circle),
                   title: Text(username.toString().split('@').first),
                 );
               },
@@ -73,15 +74,7 @@ class _HomePageState extends State<HomePage> {
           }
 
           // loading
-          return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircularProgressIndicator(),
-                Text("Loading..."),
-              ],
-            ),
-          );
+          return const CenterLoading();
         },
       ),
     );

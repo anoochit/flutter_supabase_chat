@@ -30,8 +30,8 @@ class SignInPage extends StatelessWidget {
                   padding: const EdgeInsets.all(4.0),
                   child: TextFormField(
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.account_circle),
-                      hintText: 'Username',
+                      prefixIcon: Icon(Icons.email),
+                      hintText: 'E-Mail',
                     ),
                   ),
                 ),
