@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SignUpPage extends StatelessWidget {
   SignUpPage({Key? key}) : super(key: key);
 
-  final formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -12,22 +12,13 @@ class SignUpPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
-            key: formKey,
+            key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 14.0),
                   child: Text('Sign Up', style: Theme.of(context).textTheme.headline4),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.account_circle),
-                      hintText: 'Name',
-                    ),
-                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0),

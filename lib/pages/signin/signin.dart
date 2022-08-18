@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class SignInPage extends StatelessWidget {
   SignInPage({Key? key}) : super(key: key);
 
-  final formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Form(
-          key: formKey,
+          key: _formKey,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
