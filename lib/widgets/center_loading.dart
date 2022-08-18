@@ -12,7 +12,10 @@ class CenterLoading extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: const [
           CircularProgressIndicator(),
-          Text("Loading..."),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text("Loading..."),
+          ),
         ],
       ),
     );

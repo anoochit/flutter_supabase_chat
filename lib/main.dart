@@ -22,8 +22,6 @@ main() async {
     url: dotenv.env['SUPABASE_URL'] ?? "",
     anonKey: dotenv.env['SUPABASE_ANNON_KEY'] ?? "",
     authCallbackUrlHostname: 'login-callback',
-  ).catchError(
-    (e) => log('Cannot initalized'),
   );
 
   // run app

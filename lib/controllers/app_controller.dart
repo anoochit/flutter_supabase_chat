@@ -37,7 +37,7 @@ class AppController extends GetxController {
   mockSignIn() async {
     try {
       final response = await supabase.auth.signIn(
-        email: 'anoochit@gmail.com',
+        email: 'redline.mobi@gmail.com',
         password: 'Hello123',
       );
 

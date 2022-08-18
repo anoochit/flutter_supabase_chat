@@ -4,9 +4,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_supabase/controllers/app_controller.dart';
 import 'package:flutter_supabase/models/contact.dart';
+import 'package:flutter_supabase/pages/chat/chat.dart';
 import 'package:flutter_supabase/widgets/center_loading.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../const.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,21 +18,13 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-final supabase = Supabase.instance.client;
-
 class _HomePageState extends State<HomePage> {
   final AppController _controller = Get.find<AppController>();
 
   // ignore: deprecated_member_use
   final _contactData = supabase.from('contact').select().execute();
 
-  // final x = supabase.from('contact').select().execute().then((value) {
-  //   print(value.data);
-  //   log(json.encode(value.data));
-  //   final jsonString = json.encode(value.data);
-  //   contactFromJson(jsonString);
-  // });
-
+  String room = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +45,7 @@ class _HomePageState extends State<HomePage> {
         builder: (BuildContext context, AsyncSnapshot<PostgrestResponse<dynamic>> snapshot) {
           // hase error
           if (snapshot.hasError) {
-            return const Text("Error");
+            return const Center(child: Text("Error"));
           }
 
           // has data
@@ -64,11 +59,29 @@ class _HomePageState extends State<HomePage> {
             return ListView.builder(
               itemCount: contacts.length,
               itemBuilder: (BuildContext context, int index) {
+                final id = contacts[index].id;
                 final username = contacts[index].username;
-                return ListTile(
-                  leading: const Icon(Icons.account_circle),
-                  title: Text(username.toString().split('@').first),
-                );
+
+                // show only friends
+                if (supabase.auth.currentUser!.id != id) {
+                  return ListTile(
+                    leading: const Icon(Icons.account_circle),
+                    title: Text(username.toString().split('@').first),
+                    subtitle: Text('$id'),
+                    onTap: () {
+                      // create room id
+                      if (supabase.auth.currentUser!.id.compareTo(id!) > 0) {
+                        room = "${supabase.auth.currentUser!.id}_$id";
+                      } else {
+                        room = "${id}_${supabase.auth.currentUser!.id}";
+                      }
+                      log('select room = $room');
+                      Get.to(() => ChatPage(), arguments: [id, room]);
+                    },
+                  );
+                }
+
+                return Container();
               },
             );
           }
