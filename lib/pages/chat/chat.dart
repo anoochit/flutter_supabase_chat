@@ -65,11 +65,10 @@ class _ChatPageState extends State<ChatPage> {
 
                   final jsonString = jsonEncode(response);
                   //log(jsonString);
-                  final messages = messageFromJson(jsonString);
 
-                  // final messages = response.data;
+                  final messages = messageFromJson(jsonString);
                   // log('$messages');
-                  // log('length = ${messages.length}');
+
                   return ListView.builder(
                     reverse: true,
                     itemCount: response.length,
@@ -83,7 +82,6 @@ class _ChatPageState extends State<ChatPage> {
                       );
                     },
                   );
-                  //return Container();/
                 }
 
                 // loading
@@ -99,18 +97,9 @@ class _ChatPageState extends State<ChatPage> {
               padding: const EdgeInsets.only(left: 16.0),
               child: TextFormField(
                 controller: textMessageController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Type your message...',
                   border: InputBorder.none,
-                  // suffixIcon: IconButton(
-                  //   icon: Icon(
-                  //     Icons.send,
-                  //     color: Theme.of(context).primaryColor,
-                  //   ),
-                  //   onPressed: () {
-                  //     // send message
-                  //   },
-                  // ),
                 ),
                 onFieldSubmitted: ((value) {
                   // send message
@@ -132,6 +121,3 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 }
-
-// owner = cf599367-4910-4938-9b4c-5e5512036c49
-// peer = 0ad11ea4-4ebc-4096-9f36-0036e7d57846
