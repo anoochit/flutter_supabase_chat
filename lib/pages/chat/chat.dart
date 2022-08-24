@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_supabase/const.dart';
+import 'package:flutter_supabase/controllers/chat_controller.dart';
 import 'package:flutter_supabase/models/message.dart';
 import 'package:flutter_supabase/widgets/center_loading.dart';
 import 'package:get/get.dart';
@@ -23,6 +24,7 @@ class _ChatPageState extends State<ChatPage> {
   late Stream<dynamic> response;
 
   TextEditingController textMessageController = TextEditingController();
+  ChatController chatController = Get.find<ChatController>();
 
   @override
   void initState() {
@@ -31,8 +33,6 @@ class _ChatPageState extends State<ChatPage> {
     roomId = arg[1];
     log('peer = $peerId');
     log('room = $roomId');
-
-    response = supabase.from('message:room=eq.$roomId').stream(['room']).order('created_at').execute();
   }
 
   @override
@@ -51,7 +51,7 @@ class _ChatPageState extends State<ChatPage> {
           // message list
           Expanded(
             child: StreamBuilder(
-              stream: response,
+              stream: chatController.getChatMessage(roomId: roomId),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 // has error
                 if (snapshot.hasError) {
@@ -104,13 +104,12 @@ class _ChatPageState extends State<ChatPage> {
                 onFieldSubmitted: ((value) {
                   // send message
                   if (textMessageController.text.trim().isNotEmpty) {
-                    supabase.from('message').insert({
-                      'content': textMessageController.text.trim(),
-                      'user_from': supabase.auth.currentUser!.id,
-                      'user_to': peerId,
-                      'room': roomId,
-                      // ignore: deprecated_member_use
-                    }).execute();
+                    // send message
+                    chatController.sentMessage(
+                        content: textMessageController.text.trim(),
+                        userFrom: supabase.auth.currentUser!.id,
+                        userTo: peerId,
+                        room: roomId);
                   }
                 }),
               ),

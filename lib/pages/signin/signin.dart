@@ -8,6 +8,9 @@ class SignInPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.find<AppController>();
 
+  final TextEditingController _textEmailController = TextEditingController();
+  final TextEditingController _textPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +32,7 @@ class SignInPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: TextFormField(
+                    controller: _textEmailController,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.email),
                       hintText: 'E-Mail',
@@ -38,6 +42,7 @@ class SignInPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: TextFormField(
+                    controller: _textPasswordController,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.password),
                       hintText: 'Password',
@@ -52,7 +57,21 @@ class SignInPage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       // signin
-                      _controller.mockSignIn();
+                      _controller
+                          .signIn(email: _textEmailController.text, password: _textPasswordController.text)
+                          .then((value) {
+                        if (value) {
+                          Get.snackbar(
+                            "Signed In",
+                            "Signed in as ${_textEmailController.text}",
+                          );
+                        } else {
+                          Get.snackbar(
+                            "Error",
+                            "Cannot signed in",
+                          );
+                        }
+                      });
                     },
                     child: const Text("Sign In"),
                   ),

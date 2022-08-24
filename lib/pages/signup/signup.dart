@@ -8,6 +8,9 @@ class SignUpPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.find<AppController>();
 
+  final TextEditingController _textEmailController = TextEditingController();
+  final TextEditingController _textPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +29,7 @@ class SignUpPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: TextFormField(
+                    controller: _textEmailController,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.email),
                       hintText: 'E-mail',
@@ -35,6 +39,7 @@ class SignUpPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: TextFormField(
+                    controller: _textPasswordController,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.password),
                       hintText: 'Password',
@@ -49,7 +54,18 @@ class SignUpPage extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         // sing up
-                        _controller.mockSignUp();
+                        _controller
+                            .signUp(
+                          email: _textEmailController.text,
+                          password: _textPasswordController.text,
+                        )
+                            .then((value) {
+                          if (value) {
+                            Get.snackbar('Info', 'Sign Up with email ${_textEmailController.text}');
+                          } else {
+                            Get.snackbar('Error', 'Cannot signup, please check your username and password');
+                          }
+                        });
                       },
                       child: const Text("Sign Up"),
                     ),

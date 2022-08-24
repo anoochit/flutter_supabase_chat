@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AppController extends GetxController {
-  final supabase = Supabase.instance.client;
+  SupabaseClient supabase = Supabase.instance.client;
 
   // constructor
   AppController() {
@@ -12,11 +12,11 @@ class AppController extends GetxController {
   }
 
   // mock signup
-  mockSignUp() async {
+  Future<bool> signUp({required String email, required String password}) async {
     try {
       final response = await supabase.auth.signUp(
-        'anoochit@gmail.com',
-        'Hello123',
+        email,
+        password,
       );
 
       if (response != null) {
@@ -26,30 +26,35 @@ class AppController extends GetxController {
             .from('contact')
             .insert({'id': response.user!.id, 'username': '${response.user!.email}'}).whenComplete(
                 () => log("insert user data complete"));
+        return true;
+      } else {
+        return false;
       }
     } on GoTrueException catch (e) {
       log('${e.message}');
-      Get.snackbar('Error', '${e.message}');
+      return false;
     }
   }
 
-  // mock sign in
-  mockSignIn() async {
+  //   sign in
+  Future<bool> signIn({required String email, required String password}) async {
     try {
       final response = await supabase.auth.signIn(
-        email: 'redline.mobi@gmail.com',
-        password: 'Hello123',
+        email: email,
+        password: password,
       );
+
+      log('uid = ${response.user!.id}');
 
       if (response.user != null) {
         log('${response.user!.id}');
-        Get.offAllNamed('/home');
+        return true;
       } else {
-        Get.offAllNamed('/signin');
+        return false;
       }
     } on GoTrueException catch (e) {
       log('${e.message}');
-      Get.snackbar('Error', '${e.message}');
+      return false;
     }
   }
 
@@ -63,6 +68,8 @@ class AppController extends GetxController {
     supabase.auth.onAuthStateChange((event, session) {
       if (session?.user == null) {
         Get.offAllNamed('/signin');
+      } else {
+        Get.offAllNamed('/home');
       }
     });
   }

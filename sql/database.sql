@@ -38,13 +38,13 @@ create table public.message (
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
-alter table public.message enable row level security;
+-- alter table public.message enable row level security;
 
-alter publication supabase_realtime add table public.message;
+-- alter publication supabase_realtime add table public.message;
 
-create policy "Users can insert their own messages."
-  on message for insert
-  with check ( auth.uid() = message.user_from );
+-- create policy "Users can insert their own messages."
+--   on message for insert
+--   with check ( auth.uid() = message.user_from );
 
 -- create policy "Users can view only their messages" 
 --   on message for select
